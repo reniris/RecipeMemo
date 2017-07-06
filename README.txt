@@ -1,4 +1,4 @@
-# RecipeMemo
+﻿# RecipeMemo
 提督業プラグイン レシピメモ表示
 
 ■使用ライブラリ
@@ -13,6 +13,7 @@ Livet
 
 SgmlReader 
 (https://github.com/MindTouch/SGMLReader)
-
-  ・用途 ： HTMLパース
-  ・ライセンス　：　Apache License 2.0
+    
+    ・用途 : HTMLパース
+    ・ライセンス : Apache License 2.0
+    ・ライセンス全文 : licenses/Apache.txt

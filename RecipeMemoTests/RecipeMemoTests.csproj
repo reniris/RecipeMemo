@@ -71,8 +71,10 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="Models\UserRecipeModelTests.cs" />
     <Compile Include="Model\RecipeModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecipeMemoTests.cs" />
     <Compile Include="ViewModels\RecipeMemoViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>

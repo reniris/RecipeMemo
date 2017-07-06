@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 namespace RecipeMemo.Models.Tests
 {
     [TestClass()]
-    public class RecipeModelTests
+    public class UserRecipeModelTests
     {
         [TestMethod()]
         public void InitTest()
         {
-            var m = new RecipeModel();
+            var m = new UserRecipeModel();
             var list = m.Init();
 
             foreach (var item in list)

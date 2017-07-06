@@ -95,23 +95,59 @@ namespace RecipeMemo.ViewModels
         }
         #endregion
 
-        private RecipeModel model = new RecipeModel();
+        #region UpdateLabel変更通知プロパティ
+        private string _UpdateLabel;
+
+        public string UpdateLabel
+        {
+            get
+            { return _UpdateLabel; }
+            set
+            { 
+                if (_UpdateLabel == value)
+                    return;
+                _UpdateLabel = value;
+                RaisePropertyChanged(nameof(UpdateLabel));
+            }
+        }
+        #endregion
+
+
+        #region Header変更通知プロパティ
+        private string _Header;
+
+        public string Header
+        {
+            get
+            { return _Header; }
+            set
+            { 
+                if (_Header == value)
+                    return;
+                _Header = value;
+                RaisePropertyChanged(nameof(Header));
+            }
+        }
+        #endregion
+
+        public RecipeModelBase model { get; set; }
 
         PropertyChangedEventListener listener;
 
         public RecipeMemoViewModel()
         {
-            Recipes = new ObservableCollection<RecipeItems>(model.Parse(false));
-            this.DataSource = model.DataSource;
+            
         }
 
         public void Initialize()
         {
+            this.DataSource = model.DataSource;
+            Recipes = model.Init();
+
             listener = new PropertyChangedEventListener(model) {
                 () => model.DataSource, (_, __) => RaisePropertyChanged(() => DataSource)
             };
         }
-
 
         #region UpdateCommand
         private ViewModelCommand _UpdateCommand;
@@ -131,6 +167,32 @@ namespace RecipeMemo.ViewModels
         public void Update()
         {
             Recipes = model.Update();
+        }
+
+        public static implicit operator RecipeMemoViewModel(RecipeMemoViewModels v)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+    }
+
+    public class RecipeMemoViewModels : ViewModel {
+
+        #region ViewModels変更通知プロパティ
+        private ObservableCollection<RecipeMemoViewModel> _ViewModels;
+
+        public ObservableCollection<RecipeMemoViewModel> ViewModels
+        {
+            get
+            { return _ViewModels; }
+            set
+            { 
+                if (_ViewModels == value)
+                    return;
+                _ViewModels = value;
+                RaisePropertyChanged(nameof(ViewModels));
+            }
         }
         #endregion
 

@@ -1,4 +1,5 @@
 ﻿using Grabacr07.KanColleViewer.Composition;
+using Livet;
 using RecipeMemo.Models;
 using RecipeMemo.View;
 using RecipeMemo.ViewModels;
@@ -19,9 +20,9 @@ namespace RecipeMemo
     [ExportMetadata("Description", "開発レシピを表示します")]
     [ExportMetadata("Version", "1.0")]
     [ExportMetadata("Author", "reniris")]
-    class RecipeMemo : IPlugin, ITool
+    public class RecipeMemo : IPlugin, ITool
     {
-        private RecipeMemoViewModel viewModel;
+        private ViewModel viewModel;
 
         public string Name => "Recipe";
 
@@ -29,7 +30,24 @@ namespace RecipeMemo
 
         public void Initialize()
         {
-            this.viewModel = new RecipeMemoViewModel();
+            var vm = new RecipeMemoViewModels()
+            {
+                ViewModels = new ObservableCollection<RecipeMemoViewModel>()
+            };
+
+            vm.ViewModels.Add(new RecipeMemoViewModel
+            {
+                model = new RecipeModel(),
+                UpdateLabel = "Wiki URL ",
+                Header = "装備レシピ"
+            });
+            vm.ViewModels.Add(new RecipeMemoViewModel
+            {
+                model = new UserRecipeModel(),
+                UpdateLabel = "ファイル ",
+                Header = "ユーザー定義レシピ"
+            });
+            this.viewModel = vm;
         }
     }
 }

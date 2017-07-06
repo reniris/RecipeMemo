@@ -6,39 +6,47 @@
              xmlns:ViewModels="clr-namespace:RecipeMemo.ViewModels" 
              x:Class="RecipeMemo.View.RecipeMemoView"
              mc:Ignorable="d" 
-    xmlns:metro2="http://schemes.grabacr.net/winfx/2015/personal/controls"
-    d:DataContext="{d:DesignInstance ViewModels:RecipeMemoViewModel}"
+    d:DataContext="{d:DesignInstance ViewModels:RecipeMemoViewModels}"
              d:DesignHeight="300" d:DesignWidth="600">
-    <StackPanel>
-        <Grid >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="Wiki URL "><Run Text="{Binding DataSource}" /></TextBlock>
-            <Button Content="更新" HorizontalContentAlignment="Right" Grid.Column="1" Command="{Binding UpdateCommand, Mode=OneWay}" />
-        </Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding Recipes}" >
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Margin="5"><Run Text="{Binding Title}" /></TextBlock>
-                            <ListView ItemsSource="{Binding RecipeList}" >
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn DisplayMemberBinding="{Binding fuel}" Header="燃料"/>
-                                        <GridViewColumn DisplayMemberBinding="{Binding ammo}" Header="弾薬"/>
-                                        <GridViewColumn DisplayMemberBinding="{Binding steel}" Header="鋼材"/>
-                                        <GridViewColumn DisplayMemberBinding="{Binding bauxite}" Header="ボーキ"/>
-                                        <GridViewColumn DisplayMemberBinding="{Binding comment}" Header="備考"/>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
-    </StackPanel>
+    <UserControl.Resources>
+        <DataTemplate x:Key="Header">
+            <TextBlock Text="{Binding Header}" />
+        </DataTemplate>
+        <DataTemplate x:Key="DataTemplate">
+            <StackPanel>
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{Binding Lavel}"><Run Text="{Binding DataSource}" /></TextBlock>
+                    <Button Content="更新" HorizontalContentAlignment="Right" Grid.Column="1" Command="{Binding UpdateCommand, Mode=OneWay}" />
+                </Grid>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding Recipes}" >
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Margin="5"><Run Text="{Binding Title}" /></TextBlock>
+                                    <ListView ItemsSource="{Binding RecipeList}" >
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridViewColumn DisplayMemberBinding="{Binding fuel}" Header="燃料"/>
+                                                <GridViewColumn DisplayMemberBinding="{Binding ammo}" Header="弾薬"/>
+                                                <GridViewColumn DisplayMemberBinding="{Binding steel}" Header="鋼材"/>
+                                                <GridViewColumn DisplayMemberBinding="{Binding bauxite}" Header="ボーキ"/>
+                                                <GridViewColumn DisplayMemberBinding="{Binding comment}" Header="備考"/>
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+    <TabControl ItemTemplate="{DynamicResource Header}" ItemsSource="{Binding ViewModels}" ContentTemplate="{DynamicResource DataTemplate}">
+    </TabControl>
 </UserControl>

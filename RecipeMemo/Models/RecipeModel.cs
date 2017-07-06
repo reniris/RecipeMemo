@@ -13,44 +13,22 @@ using System.Collections.ObjectModel;
 
 namespace RecipeMemo.Models
 {
-    public class RecipeModel : NotificationObject
+    public class RecipeModel : RecipeModelBase
     {
-        /*
-         * NotificationObjectはプロパティ変更通知の仕組みを実装したオブジェクトです。
-         */
-
         private const string def_url = "http://wikiwiki.jp/kancolle/?%B3%AB%C8%AF%A5%EC%A5%B7%A5%D4";
 
-        private const string filename = "Recipe.xml";
-
-
-        #region DataSource変更通知プロパティ
-        private string _DataSource = def_url;
-
-        public string DataSource
+        public RecipeModel()
         {
-            get
-            { return _DataSource; }
-            set
-            {
-                if (_DataSource == value)
-                    return;
-                _DataSource = value;
-                RaisePropertyChanged(nameof(DataSource));
-            }
+            this.DataSource = def_url;
         }
-        #endregion
 
-        public virtual ObservableCollection<RecipeItems> Update()
-        {
-            return new ObservableCollection<RecipeItems>(this.Parse(true));
-        }
+        protected override string filename => "Recipe.xml";
 
         /// <summary>
         /// Parses this instance.
         /// </summary>
         /// <returns></returns>
-        public List<RecipeItems> Parse(bool update)
+        protected override IEnumerable<RecipeItems> Load(bool update)
         {
             XDocument xml = HtmlToXml(update, this.DataSource);
 
@@ -94,7 +72,7 @@ namespace RecipeMemo.Models
             {
                 Title = titles[i],
                 RecipeList = item
-            }).ToList();
+            });
 
             return ret;
         }
@@ -107,7 +85,7 @@ namespace RecipeMemo.Models
         private XDocument HtmlToXml(bool update, string url)
         {
             //キャッシュのパス
-            var fullpath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, filename);
+            var fullpath = GetFullPath();
             XDocument xml = null;
 
             //キャッシュがある場合はそこから読む（強制更新しない場合）
@@ -126,56 +104,5 @@ namespace RecipeMemo.Models
 
             return xml;
         }
-    }
-
-    public class RecipeItems
-    {
-        /// <summary>
-        /// Gets or sets the title.
-        /// </summary>
-        /// <value>
-        /// The title.
-        /// </value>
-        public string Title { get; set; }
-        /// <summary>
-        /// Gets the recipe list.
-        /// </summary>
-        /// <value>
-        /// The recipe list.
-        /// </value>
-        public List<RecipeItem> RecipeList { get; set; }
-    }
-
-    public class RecipeItem
-    {
-        /// <summary>
-        /// 燃料
-        /// </summary>
-        public string fuel { get; set; }
-
-        /// <summary>
-        /// 弾薬
-        /// </summary>
-        public string ammo { get; set; }
-
-        /// <summary>
-        /// 鋼材
-        /// </summary>
-        public string steel { get; set; }
-
-        /// <summary>
-        /// ボーキサイト
-        /// </summary>
-        public string bauxite { get; set; }
-
-        /// <summary>
-        /// 備考
-        /// </summary>
-        public string comment { get; set; }
-
-        /// <summary>
-        /// ハイライト
-        /// </summary>
-        public bool highlight { get; set; }
     }
 }

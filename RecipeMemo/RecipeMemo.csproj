@@ -69,7 +69,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="Models\RecipeItem.cs" />
     <Compile Include="Models\RecipeModel.cs" />
+    <Compile Include="Models\RecipeModelBase.cs" />
+    <Compile Include="Models\UserRecipeModel.cs" />
     <Compile Include="RecipeMemo.cs" />
     <Compile Include="ViewModels\RecipeMemoViewModel.cs" />
     <Compile Include="View\RecipeMemoView.xaml.cs">
@@ -107,4 +110,9 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(SolutionDir)README.txt" "$(TargetDir)"
+xcopy /I /D /Y "$(SolutionDir)Licenses\*.*" "$(TargetDir)Licenses\"
+copy "$(SolutionDir)LICENSE" "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
