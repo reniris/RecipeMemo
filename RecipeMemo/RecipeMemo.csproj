@@ -111,8 +111,10 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(SolutionDir)README.txt" "$(TargetDir)"
-xcopy /I /D /Y "$(SolutionDir)Licenses\*.*" "$(TargetDir)Licenses\"
-copy "$(SolutionDir)LICENSE" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>cd "$(TargetDir)"
+copy "$(SolutionDir)README.txt" .\
+xcopy /I /D /Y "$(SolutionDir)Licenses\*.*" .\Licenses\
+copy "$(SolutionDir)LICENSE" .\
+powershell Compress-Archive -Path README.txt, Licenses, LICENSE, $(TargetFileName), SgmlReaderDll.dll -Destination RecipeMemo.zip</PostBuildEvent>
   </PropertyGroup>
 </Project>
