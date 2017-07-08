@@ -103,7 +103,7 @@ namespace RecipeMemo.ViewModels
             get
             { return _UpdateLabel; }
             set
-            { 
+            {
                 if (_UpdateLabel == value)
                     return;
                 _UpdateLabel = value;
@@ -111,8 +111,7 @@ namespace RecipeMemo.ViewModels
             }
         }
         #endregion
-
-
+        
         #region Header変更通知プロパティ
         private string _Header;
 
@@ -121,7 +120,7 @@ namespace RecipeMemo.ViewModels
             get
             { return _Header; }
             set
-            { 
+            {
                 if (_Header == value)
                     return;
                 _Header = value;
@@ -130,20 +129,39 @@ namespace RecipeMemo.ViewModels
         }
         #endregion
 
-        public RecipeModelBase model { get; set; }
+        #region modelプロパティ
+        private RecipeModelBase _model;
+
+        public RecipeModelBase model
+        {
+            get
+            { return _model; }
+            set
+            {
+                if (_model == value)
+                    return;
+                _model = value;
+
+                InitProp();
+            }
+        }
+        #endregion
 
         PropertyChangedEventListener listener;
 
         public RecipeMemoViewModel()
         {
-            
+
+        }
+
+        public void InitProp()
+        {
+            this.DataSource = model.DataSource;
+            Recipes = model.Init();
         }
 
         public void Initialize()
         {
-            this.DataSource = model.DataSource;
-            Recipes = model.Init();
-
             listener = new PropertyChangedEventListener(model) {
                 () => model.DataSource, (_, __) => RaisePropertyChanged(() => DataSource)
             };
@@ -169,16 +187,12 @@ namespace RecipeMemo.ViewModels
             Recipes = model.Update();
         }
 
-        public static implicit operator RecipeMemoViewModel(RecipeMemoViewModels v)
-        {
-            throw new NotImplementedException();
-        }
         #endregion
 
     }
 
-    public class RecipeMemoViewModels : ViewModel {
-
+    public class RecipeMemoViewModels : ViewModel
+    {
         #region ViewModels変更通知プロパティ
         private ObservableCollection<RecipeMemoViewModel> _ViewModels;
 
@@ -187,7 +201,7 @@ namespace RecipeMemo.ViewModels
             get
             { return _ViewModels; }
             set
-            { 
+            {
                 if (_ViewModels == value)
                     return;
                 _ViewModels = value;
@@ -196,5 +210,31 @@ namespace RecipeMemo.ViewModels
         }
         #endregion
 
+        #region SelectedIndex変更通知プロパティ
+        private int _SelectedIndex = -1;
+
+        public int SelectedIndex
+        {
+            get
+            { return _SelectedIndex; }
+            set
+            {
+                if (_SelectedIndex == value)
+                    return;
+                _SelectedIndex = value;
+                RaisePropertyChanged(nameof(SelectedIndex));
+            }
+        }
+        #endregion
+
+        public void Initialize()
+        {
+            foreach (var vm in this.ViewModels)
+            {
+                vm.Initialize();
+
+                this.SelectedIndex = 0;
+            }
+        }
     }
 }

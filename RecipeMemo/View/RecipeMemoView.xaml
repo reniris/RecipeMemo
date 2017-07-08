@@ -3,50 +3,100 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:ViewModels="clr-namespace:RecipeMemo.ViewModels" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:l="http://schemas.livet-mvvm.net/2011/wpf"
+    		 xmlns:kcvc="http://schemes.grabacr.net/winfx/2015/kancolleviewer/controls"
              x:Class="RecipeMemo.View.RecipeMemoView"
+             xmlns:ViewModels="clr-namespace:RecipeMemo.ViewModels"
              mc:Ignorable="d" 
-    d:DataContext="{d:DesignInstance ViewModels:RecipeMemoViewModels}"
+    Background="{DynamicResource ThemeBrushKey}"
+    Foreground="{DynamicResource ActiveForegroundBrushKey}"
+             d:DataContext="{d:DesignInstance ViewModels:RecipeMemoViewModels}"
              d:DesignHeight="300" d:DesignWidth="600">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <l:LivetCallMethodAction MethodTarget="{Binding}" MethodName="Initialize"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closed">
+            <l:DataContextDisposeAction/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
     <UserControl.Resources>
-        <DataTemplate x:Key="Header">
-            <TextBlock Text="{Binding Header}" />
-        </DataTemplate>
-        <DataTemplate x:Key="DataTemplate">
-            <StackPanel>
-                <Grid >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="{Binding Lavel}"><Run Text="{Binding DataSource}" /></TextBlock>
-                    <Button Content="更新" HorizontalContentAlignment="Right" Grid.Column="1" Command="{Binding UpdateCommand, Mode=OneWay}" />
-                </Grid>
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <ItemsControl ItemsSource="{Binding Recipes}" >
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel>
-                                    <TextBlock Margin="5"><Run Text="{Binding Title}" /></TextBlock>
-                                    <ListView ItemsSource="{Binding RecipeList}" >
-                                        <ListView.View>
-                                            <GridView>
-                                                <GridViewColumn DisplayMemberBinding="{Binding fuel}" Header="燃料"/>
-                                                <GridViewColumn DisplayMemberBinding="{Binding ammo}" Header="弾薬"/>
-                                                <GridViewColumn DisplayMemberBinding="{Binding steel}" Header="鋼材"/>
-                                                <GridViewColumn DisplayMemberBinding="{Binding bauxite}" Header="ボーキ"/>
-                                                <GridViewColumn DisplayMemberBinding="{Binding comment}" Header="備考"/>
-                                            </GridView>
-                                        </ListView.View>
-                                    </ListView>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-            </StackPanel>
-        </DataTemplate>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Styles/Colors.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Styles/Controls.Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Styles/Controls.CheckBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Styles/Controls.Expander.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Styles/Controls.FocusVisualStyle.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Styles/Controls.PasswordBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Styles/Controls.RadioButton.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Styles/Controls.Scrollbar.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Styles/Controls.Tooltip.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Styles/Icons.xaml" />
+
+                <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Themes/Dark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MetroRadiance;component/Themes/Accents/Purple.xaml" />
+
+                <ResourceDictionary Source="pack://application:,,,/KanColleViewer.Controls;component/Styles/Colors.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/KanColleViewer.Controls;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/KanColleViewer.Controls;component/Styles/Controls.HorizontalFlatListBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/KanColleViewer.Controls;component/Styles/Controls.ListView.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/KanColleViewer.Controls;component/Styles/Controls.PinButton.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/KanColleViewer.Controls;component/Styles/Controls.TabControl.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/KanColleViewer.Controls;component/Styles/Controls.Text.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate x:Key="Header">
+                <TextBlock Text="{Binding Header}" />
+            </DataTemplate>
+            <Style x:Key="{x:Type TextBox}" TargetType="{x:Type TextBlock}">
+                <Setter Property="Foreground" Value="{StaticResource ActiveForegroundBrushKey}" />
+            </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
-    <TabControl ItemTemplate="{DynamicResource Header}" ItemsSource="{Binding ViewModels}" ContentTemplate="{DynamicResource DataTemplate}">
+    <TabControl ItemTemplate="{DynamicResource Header}" ItemsSource="{Binding ViewModels}" 
+                Style="{DynamicResource VerticalTabControlStyleKey}" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" >
+        <TabControl.ContentTemplate>
+            <DataTemplate>
+                <StackPanel>
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <TextBlock Text="{Binding UpdateLabel}" Foreground="{DynamicResource ActiveForegroundBrushKey}" />
+                            <TextBlock Text="{Binding DataSource}" Foreground="{DynamicResource ActiveForegroundBrushKey}" />
+                        </StackPanel>
+                        <Button Content="更新" HorizontalContentAlignment="Right" Grid.Column="1" Command="{Binding UpdateCommand, Mode=OneWay}" />
+                    </Grid>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding Recipes}" >
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock Margin="5" Foreground="{DynamicResource ActiveForegroundBrushKey}"><Run Text="{Binding Title}" /></TextBlock>
+                                        <ListView ItemsSource="{Binding RecipeList}" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" >
+                                            <ListView.View>
+                                                <GridView>
+                                                    <GridViewColumn DisplayMemberBinding="{Binding fuel}" Header="燃料"/>
+                                                    <GridViewColumn DisplayMemberBinding="{Binding ammo}" Header="弾薬"/>
+                                                    <GridViewColumn DisplayMemberBinding="{Binding steel}" Header="鋼材"/>
+                                                    <GridViewColumn DisplayMemberBinding="{Binding bauxite}" Header="ボーキ"/>
+                                                    <GridViewColumn DisplayMemberBinding="{Binding comment}" Header="備考"/>
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </StackPanel>
+            </DataTemplate>
+        </TabControl.ContentTemplate>
     </TabControl>
 </UserControl>

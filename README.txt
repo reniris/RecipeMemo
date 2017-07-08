@@ -20,6 +20,13 @@ Livet
     ・用途 : MVVM(Model/View/ViewModel)パターン用インフラストラクチャ
     ・ライセンス : zlib/libpng
 
+MetroRadiance
+
+    ・用途 : コントロールスタイル設定
+    ・ライセンス : The MIT License (MIT)
+    ・ライセンス全文 : licenses/MetroRadiance.txt
+
+
 SgmlReader 
 (https://github.com/MindTouch/SGMLReader)
     

@@ -18,36 +18,39 @@ namespace RecipeMemo
     [ExportMetadata("Guid", "42ED0309-9AE0-48C5-846A-1AE125678737")]
     [ExportMetadata("Title", "RecipeMemo")]
     [ExportMetadata("Description", "開発レシピを表示します")]
-    [ExportMetadata("Version", "1.1")]
+    [ExportMetadata("Version", "2.0")]
     [ExportMetadata("Author", "reniris")]
     public class RecipeMemo : IPlugin, ITool
     {
-        private ViewModel viewModel;
+        //private ViewModel viewModel;
 
         public string Name => "Recipe";
 
-        object ITool.View => new RecipeMemoView { DataContext = this.viewModel, };
+        object ITool.View => new RecipeMemoView
+        {
+            DataContext = new RecipeMemoViewModels()
+            {
+                ViewModels = new ObservableCollection<RecipeMemoViewModel>
+                {
+                    new RecipeMemoViewModel
+                    {
+                        model = new RecipeModel(),
+                        UpdateLabel = "Wiki URL ",
+                        Header = "装備レシピ"
+                    },
+                    new RecipeMemoViewModel
+                    {
+                        model = new UserRecipeModel(),
+                        UpdateLabel = "ファイル ",
+                        Header = "ユーザー定義レシピ"
 
+                    },
+                }
+            }
+        };
+        
         public void Initialize()
         {
-            var vm = new RecipeMemoViewModels()
-            {
-                ViewModels = new ObservableCollection<RecipeMemoViewModel>()
-            };
-
-            vm.ViewModels.Add(new RecipeMemoViewModel
-            {
-                model = new RecipeModel(),
-                UpdateLabel = "Wiki URL ",
-                Header = "装備レシピ"
-            });
-            vm.ViewModels.Add(new RecipeMemoViewModel
-            {
-                model = new UserRecipeModel(),
-                UpdateLabel = "ファイル ",
-                Header = "ユーザー定義レシピ"
-            });
-            this.viewModel = vm;
         }
     }
 }
