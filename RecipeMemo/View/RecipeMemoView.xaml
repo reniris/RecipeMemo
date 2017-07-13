@@ -89,6 +89,18 @@
                                                     <GridViewColumn DisplayMemberBinding="{Binding comment}" Header="備考"/>
                                                 </GridView>
                                             </ListView.View>
+                                            <ListView.ItemContainerStyle>
+                                                <Style TargetType="{x:Type ListViewItem}">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsSelected" Value="True" >
+                                                            <Setter Property="Background" Value="{DynamicResource AccentHighlightBrushKey}" />
+                                                        </Trigger>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="{DynamicResource AccentActiveBrushKey}"/>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </ListView.ItemContainerStyle>
                                         </ListView>
                                     </StackPanel>
                                 </DataTemplate>
