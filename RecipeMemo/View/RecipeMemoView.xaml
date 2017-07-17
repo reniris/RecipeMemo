@@ -61,6 +61,8 @@
                 Style="{DynamicResource VerticalTabControlStyleKey}" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" >
         <TabControl.ContentTemplate>
             <DataTemplate>
+                <ScrollViewer VerticalScrollBarVisibility="Visible" Height="{Binding RelativeSource={RelativeSource FindAncestor, 
+                        AncestorType={x:Type StackPanel}}, Path=ActualHeight}">
                 <StackPanel>
                     <Grid >
                         <Grid.ColumnDefinitions>
@@ -73,8 +75,7 @@
                         </StackPanel>
                         <Button Content="更新" HorizontalContentAlignment="Right" Grid.Column="1" Command="{Binding UpdateCommand, Mode=OneWay}" />
                     </Grid>
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding Recipes}" >
+                        <ItemsControl ItemsSource="{Binding Recipes}" ScrollViewer.CanContentScroll="True" >
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel>
@@ -105,9 +106,14 @@
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical" CanVerticallyScroll="True"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
                         </ItemsControl>
-                    </ScrollViewer>
                 </StackPanel>
+                </ScrollViewer>
             </DataTemplate>
         </TabControl.ContentTemplate>
     </TabControl>
